@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="icon" href="data:,">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Histogram Viewer</title>
@@ -105,13 +106,15 @@
             document.getElementById('histogram').src = imagePath;
         }
 
-        // Event listeners for dropdown changes
-        document.getElementById('method').addEventListener('change', updateHistogram);
-        document.getElementById('samplesize').addEventListener('change', updateHistogram);
-        document.getElementById('intercept').addEventListener('change', updateHistogram);
-
-        // Initial update when the page loads
-        updateHistogram();
+        document.addEventListener('DOMContentLoaded', function() {
+    // Add event listeners to dropdowns
+    document.getElementById('method').addEventListener('change', updateHistogram);
+    document.getElementById('samplesize').addEventListener('change', updateHistogram);
+    document.getElementById('intercept').addEventListener('change', updateHistogram);
+    
+    // Call updateHistogram initially to display the first default histogram
+    updateHistogram();
+});
     </script>
 </body>
 </html>
