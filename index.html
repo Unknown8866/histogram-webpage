@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Histogram Viewer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+        }
+        #histogram {
+            max-width: 100%;
+            height: auto;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Select Method, Sample Size, and Intercept</h1>
+        <!-- Dropdown for method selection -->
+        <label for="method">Method:</label>
+        <select id="method">
+            <option value="endog">OLS</option>
+            <option value="copula_IKDE">copula_IKDE</option>
+            <option value="copula_Fixed">copula_Fixed</option>
+            <option value="copula_Adaptive">copula_Adaptive</option>
+        </select>
+
+        <!-- Dropdown for sample size selection -->
+        <label for="samplesize">Sample Size:</label>
+        <select id="samplesize">
+            <option value="100">100</option>
+            <option value="200">200</option>
+            <option value="400">400</option>
+            <option value="600">600</option>
+            <option value="800">800</option>
+            <option value="1000">1000</option>
+            <option value="2000">2000</option>
+            <option value="4000">4000</option>
+            <option value="6000">6000</option>
+            <option value="8000">8000</option>
+            <option value="10000">10000</option>
+            <option value="20000">20000</option>
+            <option value="40000">40000</option>
+            <option value="60000">60000</option>
+        </select>
+
+        <!-- Dropdown for intercept choice -->
+        <label for="intercept">Intercept:</label>
+        <select id="intercept">
+            <option value="i">With Intercept</option>
+            <option value="">Without Intercept</option>
+        </select>
+
+        <!-- Area to display the histogram -->
+        <div>
+            < img id="histogram" src="" alt="Selected Histogram">
+        </div>
+    </div>
+
+    <script>
+        // Function to determine the variable name based on the selected method and intercept
+        function getVariableName(method, intercept) {
+            if (method === 'endog') {
+                return intercept === 'i' ? 'endog.i.param_p' : 'endog.param_p';
+            } else if (method === 'copula_IKDE') {
+                return intercept === 'i' ? 'copula.id.param_p' : 'copula.d.param_p';
+            } else if (method === 'copula_Fixed') {
+                return intercept === 'i' ? 'copula.i.param_p' : 'copula.param_p';
+            } else if (method === 'copula_Adaptive') {
+                return intercept === 'i' ? 'copulaA.i.param_p' : 'copulaA.param_p';
+            }
+        }
+
+        // Function to update the histogram based on dropdown selections
+        function updateHistogram() {
+            var method = document.getElementById('method').value;
+            var samplesize = document.getElementById('samplesize').value;
+            var intercept = document.getElementById('intercept').value;
+            
+            // Get the variable name based on the method and intercept
+            var variableName = getVariableName(method, intercept);
+            
+            // Construct the image path
+            var imagePath = `histograms/histogram_${variableName}_size_${samplesize}.png`;
+            
+            // Update the image source
+            document.getElementById('histogram').src = imagePath;
+        }
+
+        // Event listeners for dropdown changes
+        document.getElementById('method').addEventListener('change', updateHistogram);
+        document.getElementById('samplesize').addEventListener('change', updateHistogram);
+        document.getElementById('intercept').addEventListener('change', updateHistogram);
+
+        // Initial update when the page loads
+        updateHistogram();
+    </script>
+</body>
+</html>
