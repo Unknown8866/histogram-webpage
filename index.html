@@ -98,7 +98,9 @@
             
             // Construct the image path
             var imagePath = `histograms/histogram_${variableName}_size_${samplesize}.png`;
-            
+
+            // Debugging: Log the image path to the console
+            console.log("Image path: ", imagePath);
             // Update the image source
             document.getElementById('histogram').src = imagePath;
         }
