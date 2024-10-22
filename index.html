@@ -6,72 +6,136 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Histogram Viewer</title>
     <style>
+        /* General page styling */
         body {
             font-family: Arial, sans-serif;
             padding: 20px;
-            font-size: 18px; /* Increase font size */
+            margin: 0;
+            box-sizing: border-box;
         }
-        h1 {
-            font-size: 28px; /* Larger header size */
-        }
-        label {
-            font-size: 20px; /* Larger label size */
-            display: block;
-            margin-top: 10px;
-        }
+
+        /* Container for title, dropdowns, and image */
         .container {
-            max-width: 600px;
-            margin: auto;
+            display: flex; /* Flexbox for layout */
+            justify-content: space-between; /* Space between dropdowns and image */
+            max-width: 1200px; /* Maximum width for the layout */
+            margin: auto; /* Center the container */
+            gap: 20px; /* Adds space between columns */
         }
-        #histogram {
-            max-width: 100%;
+
+        /* Styling for the title */
+        .title {
+            text-align: center;
+            font-size: 28px; /* Increase font size */
+            margin-bottom: 20px;
+        }
+
+        /* Left side: Dropdowns */
+        .dropdowns {
+            flex-basis: 35%; /* Left column will take up 35% of the container */
+        }
+
+        /* Styling for dropdown labels and fields */
+        label {
+            display: block;
+            font-size: 18px; /* Slightly larger label size for readability */
+            margin: 10px 0;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px; /* Padding for better appearance */
+            font-size: 16px;
+            margin-bottom: 20px; /* Space between dropdowns */
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        /* Right side: Image */
+        .image-container {
+            flex-basis: 65%; /* Right column will take up 65% of the container */
+            display: flex; /* To center the image horizontally and vertically */
+            justify-content: center;
+            align-items: center;
+        }
+
+        img {
+            max-width: 100%; /* Make the image responsive */
             height: auto;
-            margin-top: 20px;
+            border: 2px solid black; /* Optional: Add a border to the image */
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column; /* Stack columns on smaller screens */
+            }
+            .dropdowns, .image-container {
+                flex-basis: 100%; /* Take full width on small screens */
+            }
+            .title {
+                font-size: 24px; /* Reduce title size on small screens */
+            }
+            label {
+                font-size: 16px; /* Reduce label size for smaller screens */
+            }
+            select {
+                font-size: 14px; /* Smaller font size for dropdowns on smaller screens */
+            }
         }
     </style>
 </head>
 <body>
+
+    <!-- Title at the top -->
+    <h1 class="title">Select Method, Sample Size, and Intercept</h1>
+
+    <!-- Flex container for dropdowns on the left and image on the right -->
     <div class="container">
-        <h1>Select Method, Sample Size, and Intercept</h1>
-        <!-- Dropdown for method selection -->
-        <label for="method">Method:</label>
-        <select id="method">
-            <option value="endog">OLS</option>
-            <option value="copula_IKDE">copula_IKDE</option>
-            <option value="copula_Fixed">copula_Fixed</option>
-            <option value="copula_Adaptive">copula_Adaptive</option>
-        </select>
+        
+        <!-- Left side: Dropdowns -->
+        <div class="dropdowns">
+            <!-- Dropdown for method selection -->
+            <label for="method">Method:</label>
+            <select id="method">
+                <option value="endog">OLS</option>
+                <option value="copula_IKDE">copula_IKDE</option>
+                <option value="copula_Fixed">copula_Fixed</option>
+                <option value="copula_Adaptive">copula_Adaptive</option>
+            </select>
 
-        <!-- Dropdown for sample size selection -->
-        <label for="samplesize">Sample Size:</label>
-        <select id="samplesize">
-            <option value="100">100</option>
-            <option value="200">200</option>
-            <option value="400">400</option>
-            <option value="600">600</option>
-            <option value="800">800</option>
-            <option value="1000">1000</option>
-            <option value="2000">2000</option>
-            <option value="4000">4000</option>
-            <option value="6000">6000</option>
-            <option value="8000">8000</option>
-            <option value="10000">10000</option>
-            <option value="20000">20000</option>
-            <option value="40000">40000</option>
-            <option value="60000">60000</option>
-        </select>
+            <!-- Dropdown for sample size selection -->
+            <label for="samplesize">Sample Size:</label>
+            <select id="samplesize">
+                <option value="100">100</option>
+                <option value="200">200</option>
+                <option value="400">400</option>
+                <option value="600">600</option>
+                <option value="800">800</option>
+                <option value="1000">1000</option>
+                <option value="2000">2000</option>
+                <option value="4000">4000</option>
+                <option value="6000">6000</option>
+                <option value="8000">8000</option>
+                <option value="10000">10000</option>
+                <option value="20000">20000</option>
+                <option value="40000">40000</option>
+                <option value="60000">60000</option>
+            </select>
 
-        <!-- Dropdown for intercept choice -->
-        <label for="intercept">Intercept:</label>
-        <select id="intercept">
-            <option value="i">With Intercept</option>
-            <option value="">Without Intercept</option>
-        </select>
+            <!-- Dropdown for intercept choice -->
+            <label for="intercept">Intercept:</label>
+            <select id="intercept">
+                <option value="i">With Intercept</option>
+                <option value="">Without Intercept</option>
+            </select>
+        </div>
 
-        <!-- Area to display the histogram -->
-        <div>
+        <!-- Right side: Image display area -->
+        <div class="image-container">
             <img id="histogram" src="" alt="Selected Histogram">
         </div>
+
     </div>
 
     <script>
@@ -93,28 +157,28 @@
             var method = document.getElementById('method').value;
             var samplesize = document.getElementById('samplesize').value;
             var intercept = document.getElementById('intercept').value;
-            
+
             // Get the variable name based on the method and intercept
             var variableName = getVariableName(method, intercept);
-            
+
             // Construct the image path
             var imagePath = `histograms/histogram_${variableName}_size_${samplesize}.png`;
 
-            // Debugging: Log the image path to the console
-            console.log("Image path: ", imagePath);
             // Update the image source
             document.getElementById('histogram').src = imagePath;
         }
 
+        // Ensure the DOM is fully loaded before running the JavaScript
         document.addEventListener('DOMContentLoaded', function() {
-    // Add event listeners to dropdowns
-    document.getElementById('method').addEventListener('change', updateHistogram);
-    document.getElementById('samplesize').addEventListener('change', updateHistogram);
-    document.getElementById('intercept').addEventListener('change', updateHistogram);
-    
-    // Call updateHistogram initially to display the first default histogram
-    updateHistogram();
-});
+            // Add event listeners to the dropdowns
+            document.getElementById('method').addEventListener('change', updateHistogram);
+            document.getElementById('samplesize').addEventListener('change', updateHistogram);
+            document.getElementById('intercept').addEventListener('change', updateHistogram);
+
+            // Call updateHistogram once to display the initial histogram
+            updateHistogram();
+        });
     </script>
+
 </body>
 </html>
