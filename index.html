@@ -77,13 +77,13 @@
         // Function to determine the variable name based on the selected method and intercept
         function getVariableName(method, intercept) {
             if (method === 'endog') {
-                return intercept === 'i' ? 'endog.i.param_p' : 'endog.param_p';
+                return 'endog' + (intercept === 'i' ? '.i.param_p' : '.param_p');
             } else if (method === 'copula_IKDE') {
-                return intercept === 'i' ? 'copula.id.param_p' : 'copula.d.param_p';
+                return 'copula.' + (intercept === 'i' ? 'id' : 'd') + '.param_p';
             } else if (method === 'copula_Fixed') {
-                return intercept === 'i' ? 'copula.i.param_p' : 'copula.param_p';
+                return 'copula' + (intercept === 'i' ? '.i.param_p' : '.param_p');
             } else if (method === 'copula_Adaptive') {
-                return intercept === 'i' ? 'copulaA.i.param_p' : 'copulaA.param_p';
+                return 'copulaA' + (intercept === 'i' ? '.i.param_p' : '.param_p');
             }
         }
 
