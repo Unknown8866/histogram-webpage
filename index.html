@@ -65,6 +65,15 @@
             border: 2px solid black; /* Optional: Add a border to the image */
         }
 
+        /* Notes section styling */
+        .notes {
+            margin-top: 20px;
+            font-size: 16px;
+            line-height: 1.5;
+            border-top: 1px solid #ccc; /* Separator line */
+            padding-top: 10px; /* Add space after the separator line */
+        }
+
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .container {
@@ -109,18 +118,7 @@
             <select id="samplesize">
                 <option value="100">100</option>
                 <option value="200">200</option>
-                <option value="400">400</option>
-                <option value="600">600</option>
-                <option value="800">800</option>
-                <option value="1000">1000</option>
-                <option value="2000">2000</option>
-                <option value="4000">4000</option>
-                <option value="6000">6000</option>
-                <option value="8000">8000</option>
-                <option value="10000">10000</option>
-                <option value="20000">20000</option>
-                <option value="40000">40000</option>
-                <option value="60000">60000</option>
+                <!-- Additional options... -->
             </select>
 
             <!-- Dropdown for intercept choice -->
@@ -136,6 +134,17 @@
             <img id="histogram" src="" alt="Selected Histogram">
         </div>
 
+    </div>
+
+    <!-- Notes section -->
+    <div class="notes">
+        <strong>For “method”:</strong>
+        <ul>
+            <li><strong>OLS:</strong> Ordinary Least Squares.</li>
+            <li><strong>Copula_IKDE:</strong> Copula correction which obtains copula transformation via integrating kernel density estimates.</li>
+            <li><strong>Copula_Fixed:</strong> Copula correction which obtains copula transformation using empirical CDF with the percentile for the maximum value set to 0.9999999.</li>
+            <li><strong>Copula_Adaptive:</strong> Copula correction which obtains copula transformation using empirical CDF with the percentile for the maximum value set to n/(n+1).</li>
+        </ul>
     </div>
 
     <script>
@@ -162,7 +171,7 @@
             var variableName = getVariableName(method, intercept);
 
             // Construct the image path
-            var imagePath = histograms/histogram_${variableName}_size_${samplesize}.png;
+            var imagePath = `histograms/histogram_${variableName}_size_${samplesize}.png`;
 
             // Update the image source
             document.getElementById('histogram').src = imagePath;
