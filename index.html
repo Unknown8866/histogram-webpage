@@ -65,15 +65,6 @@
             border: 2px solid black; /* Optional: Add a border to the image */
         }
 
-        /* Method descriptions styling */
-        .method-descriptions {
-            text-align: center;
-            font-size: 16px;
-            margin-top: 20px; /* Space above the description */
-            padding: 10px;
-            border-top: 1px solid #ccc; /* Adds a top border for separation */
-        }
-
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .container {
@@ -101,22 +92,35 @@
 
     <!-- Flex container for dropdowns on the left and image on the right -->
     <div class="container">
+        
         <!-- Left side: Dropdowns -->
         <div class="dropdowns">
             <!-- Dropdown for method selection -->
             <label for="method">Method:</label>
             <select id="method">
                 <option value="endog">OLS</option>
-                <option value="copula_IKDE">Copula IKDE</option>
-                <option value="copula_Fixed">Copula Fixed</option>
-                <option value="copula_Adaptive">Copula Adaptive</option>
+                <option value="copula_IKDE">copula_IKDE</option>
+                <option value="copula_Fixed">copula_Fixed</option>
+                <option value="copula_Adaptive">copula_Adaptive</option>
             </select>
 
             <!-- Dropdown for sample size selection -->
             <label for="samplesize">Sample Size:</label>
             <select id="samplesize">
                 <option value="100">100</option>
-                <!-- Additional options -->
+                <option value="200">200</option>
+                <option value="400">400</option>
+                <option value="600">600</option>
+                <option value="800">800</option>
+                <option value="1000">1000</option>
+                <option value="2000">2000</option>
+                <option value="4000">4000</option>
+                <option value="6000">6000</option>
+                <option value="8000">8000</option>
+                <option value="10000">10000</option>
+                <option value="20000">20000</option>
+                <option value="40000">40000</option>
+                <option value="60000">60000</option>
             </select>
 
             <!-- Dropdown for intercept choice -->
@@ -131,19 +135,56 @@
         <div class="image-container">
             <img id="histogram" src="" alt="Selected Histogram">
         </div>
+
     </div>
 
-    <!-- Method descriptions at the bottom -->
-    <div class="method-descriptions">
+    <script>
+        // Function to determine the variable name based on the selected method and intercept
+        function getVariableName(method, intercept) {
+            if (method === 'endog') {
+                return 'endog' + (intercept === 'i' ? '.i.param_p' : '.param_p');
+            } else if (method === 'copula_IKDE') {
+                return 'copula.' + (intercept === 'i' ? 'id' : 'd') + '.param_p';
+            } else if (method === 'copula_Fixed') {
+                return 'copula' + (intercept === 'i' ? '.i.param_p' : '.param_p');
+            } else if (method === 'copula_Adaptive') {
+                return 'copulaA' + (intercept === 'i' ? '.i.param_p' : '.param_p');
+            }
+        }
+
+        // Function to update the histogram based on dropdown selections
+        function updateHistogram() {
+            var method = document.getElementById('method').value;
+            var samplesize = document.getElementById('samplesize').value;
+            var intercept = document.getElementById('intercept').value;
+
+            // Get the variable name based on the method and intercept
+            var variableName = getVariableName(method, intercept);
+
+            // Construct the image path
+            var imagePath = histograms/histogram_${variableName}_size_${samplesize}.png;
+
+            // Update the image source
+            document.getElementById('histogram').src = imagePath;
+        }
+
+        // Ensure the DOM is fully loaded before running the JavaScript
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add event listeners to the dropdowns
+            document.getElementById('method').addEventListener('change', updateHistogram);
+            document.getElementById('samplesize').addEventListener('change', updateHistogram);
+            document.getElementById('intercept').addEventListener('change', updateHistogram);
+
+            // Call updateHistogram once to display the initial histogram
+            updateHistogram();
+        });
+        <div class="method-descriptions">
         For “method”: <br>
         OLS: Ordinary Least Squares. <br>
         Copula_IKDE: Copula correction which obtains copula transformation via integrating kernel density estimates. <br>
         Copula_Fixed: Copula correction which obtains copula transformation using empirical CDF with the percentile for maximum value set to .9999999. <br>
         Copula_Adaptive: Copula correction which obtains copula transformation using empirical CDF with the percentile for maximum value set to n/(n+1).
     </div>
-
-    <script>
-        // JavaScript functionality for updating the image based on selections
     </script>
 
 </body>
